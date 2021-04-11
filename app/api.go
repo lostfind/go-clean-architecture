@@ -1,8 +1,11 @@
 package main
 
-import "zipcode/presentation/api"
+import (
+	"zipcode/data/repositories"
+	"zipcode/infrastructure"
+)
 
 func main() {
-	apiApp := api.NewApiConroller()
-	apiApp.Init()
+	repositories.LoadData()
+	infrastructure.ApiServerInit()
 }

@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	"errors"
 	"zipcode/domain/model"
+	"zipcode/domain/usecase"
 )
 
 type AddressFile struct {
@@ -11,7 +11,7 @@ type AddressFile struct {
 func (z AddressFile) GetAddressForZipCode(zipcode string) (model.Address, error) {
 	addr, ok := AddressDatas[zipcode]
 	if !ok {
-		return model.Address{}, errors.New("no zip data")
+		return model.Address{}, usecase.ErrNotFound
 	}
 
 	address := model.Address{

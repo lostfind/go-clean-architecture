@@ -11,36 +11,18 @@ type ApiConroller struct {
 	useCase usecase.AddressFinder
 }
 
-func NewApiConroller() *ApiConroller {
+func NewAPIController() *ApiConroller {
 	return &ApiConroller{
 		useCase: usecase.NewAddressFinder(repositories.AddressFile{}),
 	}
 }
 
-func (c ApiConroller) Init() {
-	repositories.LoadData()
-	c.serverInit()
-}
-
-func (c ApiConroller) serverInit() {
-	http.HandleFunc("/zipcodes", c.GetAddress)
-	http.ListenAndServe(":8080", nil)
-}
-
-func (c ApiConroller) GetAddress(w http.ResponseWriter, req *http.Request) {
+func (c ApiConroller) GetAddress(w http.ResponseWriter, req *http.Request) error {
 	zipcode := req.URL.Query().Get("zipcode")
 	zipCodeModel, err := c.useCase.GetAddress(zipcode)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+		return err
 	}
 
-	response, err := Json(viewmodel.AddressByZipCode(zipCodeModel))
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(response)
+	return JsonResponse(w, viewmodel.AddressByZipCode(zipCodeModel))
 }
