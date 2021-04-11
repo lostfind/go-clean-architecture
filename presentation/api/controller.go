@@ -19,10 +19,10 @@ func NewAPIController() *ApiConroller {
 
 func (c ApiConroller) GetAddress(w http.ResponseWriter, req *http.Request) error {
 	zipcode := req.URL.Query().Get("zipcode")
-	zipCodeModel, err := c.useCase.GetAddress(zipcode)
+	address, err := c.useCase.GetAddress(zipcode)
 	if err != nil {
 		return err
 	}
 
-	return JsonResponse(w, viewmodel.AddressByZipCode(zipCodeModel))
+	return JsonResponse(w, viewmodel.NewAddressViewModel(address))
 }

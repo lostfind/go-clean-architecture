@@ -18,7 +18,7 @@ type AddressKana struct {
 	TownName string `json:"townKana"`
 }
 
-func AddressByZipCode(address model.Address) AddressViewModel {
+func NewAddressViewModel(address model.Address) AddressViewModel {
 	viewModel := AddressViewModel{
 		ZipCode:  address.ZipCode,
 		PrefCode: address.Prefecture.ID,
