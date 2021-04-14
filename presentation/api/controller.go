@@ -1,7 +1,6 @@
 package api
 
 import (
-	"net/http"
 	"zipcode/data/repositories"
 	"zipcode/domain/usecase"
 	"zipcode/presentation/viewmodel"
@@ -17,12 +16,12 @@ func NewAPIController() *ApiConroller {
 	}
 }
 
-func (c ApiConroller) GetAddress(w http.ResponseWriter, req *http.Request) error {
-	zipcode := req.URL.Query().Get("zipcode")
+func (c ApiConroller) GetAddress(ctx Context) error {
+	zipcode := ctx.Param("zipcode")
 	address, err := c.useCase.GetAddress(zipcode)
 	if err != nil {
 		return err
 	}
 
-	return JsonResponse(w, viewmodel.NewAddressViewModel(address))
+	return JsonResponse(ctx, viewmodel.NewAddressViewModel(address))
 }

@@ -7,5 +7,5 @@ import (
 
 func main() {
 	repositories.LoadData()
-	infrastructure.ApiServerInit()
+	infrastructure.GinServer().Run()
 }

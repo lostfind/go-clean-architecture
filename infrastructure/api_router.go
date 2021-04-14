@@ -1,29 +1,15 @@
 package infrastructure
 
 import (
-	"net/http"
-	"zipcode/domain/usecase"
 	"zipcode/presentation/api"
+
+	"github.com/gin-gonic/gin"
 )
 
-type appHandler func(http.ResponseWriter, *http.Request) error
-
-func (fn appHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if err := fn(w, r); err != nil {
-		status := http.StatusInternalServerError
-
-		switch err {
-		case usecase.ErrNotFound:
-			status = http.StatusNotFound
-		}
-
-		http.Error(w, err.Error(), status)
-	}
-}
-
-func ApiServerInit() {
+func GinServer() *gin.Engine {
 	apiController := api.NewAPIController()
+	r := gin.Default()
+	r.GET("/zipcodes/:zipcode", func(c *gin.Context) { apiController.GetAddress(c) })
 
-	http.Handle("/zipcodes", appHandler(apiController.GetAddress))
-	http.ListenAndServe(":8080", nil)
+	return r
 }

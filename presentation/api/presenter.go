@@ -1,17 +1,11 @@
 package api
 
 import (
-	"encoding/json"
 	"net/http"
 )
 
-func JsonResponse(w http.ResponseWriter, data interface{}) error {
-	response, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
+func JsonResponse(ctx Context, data interface{}) error {
 
-	w.Header().Set("Content-Type", "application/json")
-	_, err = w.Write(response)
-	return err
+	ctx.JSON(http.StatusOK, data)
+	return nil
 }
