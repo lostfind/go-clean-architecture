@@ -4,8 +4,6 @@ import (
 	"net/http"
 )
 
-func JsonResponse(ctx Context, data interface{}) error {
-
+func JsonResponse(ctx Context, data interface{}) {
 	ctx.JSON(http.StatusOK, data)
-	return nil
 }

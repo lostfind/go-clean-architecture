@@ -1,6 +1,6 @@
 package api
 
 type Context interface {
-	Param(string) string
-	JSON(int, interface{})
+	Param(param string) string
+	JSON(status int, data interface{})
 }

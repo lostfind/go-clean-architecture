@@ -2,14 +2,48 @@ package repositories
 
 import (
 	"zipcode/domain/model"
+	"zipcode/domain/repository"
 	"zipcode/domain/usecase"
 )
 
-type AddressFile struct {
+var addressDatas map[string]addressData
+
+func init() {
+	addressDatas = make(map[string]addressData)
+
+	addressDatas["4630062"] = addressData{
+		zipCode:      "4630062",
+		prefID:       23,
+		prefName:     "愛知県",
+		prefNameKana: "アイチケン",
+		cityID:       23113,
+		cityName:     "名古屋市守山区",
+		cityNameKana: "ナゴヤシモリヤマク",
+		townName:     "長栄",
+		townNameKana: "チョウエイ",
+	}
+	addressDatas["4630063"] = addressData{
+		zipCode:      "4630063",
+		prefID:       23,
+		prefName:     "愛知県",
+		prefNameKana: "アイチケン",
+		cityID:       23113,
+		cityName:     "名古屋市守山区",
+		cityNameKana: "ナゴヤシモリヤマク",
+		townName:     "八反",
+		townNameKana: "ハッタン",
+	}
 }
 
-func (z AddressFile) GetAddressForZipCode(zipcode string) (model.Address, error) {
-	addr, ok := AddressDatas[zipcode]
+func NewFileRepository() repository.ZipCodeRepository {
+	return new(addressFile)
+}
+
+type addressFile struct {
+}
+
+func (f addressFile) GetAddressForZipCode(zipcode string) (model.Address, error) {
+	addr, ok := addressDatas[zipcode]
 	if !ok {
 		return model.Address{}, usecase.ErrNotFound
 	}
@@ -25,7 +59,7 @@ func (z AddressFile) GetAddressForZipCode(zipcode string) (model.Address, error)
 	return address, nil
 }
 
-type AddressData struct {
+type addressData struct {
 	zipCode      string
 	prefID       int64
 	prefName     string
@@ -35,33 +69,4 @@ type AddressData struct {
 	cityNameKana string
 	townName     string
 	townNameKana string
-}
-
-var AddressDatas map[string]AddressData
-
-func LoadData() {
-	AddressDatas = make(map[string]AddressData)
-
-	AddressDatas["4630062"] = AddressData{
-		zipCode:      "4630062",
-		prefID:       23,
-		prefName:     "愛知県",
-		prefNameKana: "アイチケン",
-		cityID:       23113,
-		cityName:     "名古屋市守山区",
-		cityNameKana: "ナゴヤシモリヤマク",
-		townName:     "長栄",
-		townNameKana: "チョウエイ",
-	}
-	AddressDatas["4630063"] = AddressData{
-		zipCode:      "4630063",
-		prefID:       23,
-		prefName:     "愛知県",
-		prefNameKana: "アイチケン",
-		cityID:       23113,
-		cityName:     "名古屋市守山区",
-		cityNameKana: "ナゴヤシモリヤマク",
-		townName:     "八反",
-		townNameKana: "ハッタン",
-	}
 }
