@@ -23,6 +23,7 @@ func NewAddressViewModel(address model.Address) AddressViewModel {
 		ZipCode:  address.ZipCode,
 		PrefCode: address.Prefecture.ID,
 		PrefName: address.Prefecture.Name,
+		CityCode: address.City.ID,
 		CityName: address.City.Name,
 		TownName: address.TownName,
 		FullWidthKana: AddressKana{

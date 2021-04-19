@@ -4,6 +4,7 @@ import (
 	"zipcode/data/repositories"
 	"zipcode/domain/usecase"
 	"zipcode/infrastructure"
+	"zipcode/infrastructure/database"
 
 	"zipcode/presentation/api"
 )
@@ -11,7 +12,8 @@ import (
 var apiController api.ApiController
 
 func init() {
-	repository := repositories.NewFileRepository()
+	db := database.NewMySqlDB()
+	repository := repositories.NewDbRepository(db)
 	useCase := usecase.NewAddressFinder(repository)
 	apiController = api.NewApiController(useCase)
 }

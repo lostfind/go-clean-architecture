@@ -1,13 +1,12 @@
 package api
 
 import (
-	"log"
 	"zipcode/domain/usecase"
 	"zipcode/presentation/viewmodel"
 )
 
 type ApiController interface {
-	GetAddress(ctx Context) error
+	GetAddress(ctx Context)
 }
 
 type apiController struct {
@@ -20,15 +19,13 @@ func NewApiController(uc usecase.AddressFinder) ApiController {
 	}
 }
 
-func (c apiController) GetAddress(ctx Context) error {
+func (c apiController) GetAddress(ctx Context) {
 	zipcode := ctx.Param("zipcode")
 	address, err := c.useCase.GetAddress(zipcode)
 	if err != nil {
-		log.Print(err)
-		return err
+		ErrResponse(ctx, err.Error())
+		return
 	}
 
 	JsonResponse(ctx, viewmodel.NewAddressViewModel(address))
-
-	return nil
 }
