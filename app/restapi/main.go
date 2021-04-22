@@ -3,8 +3,8 @@ package main
 import (
 	"zipcode/data/repositories"
 	"zipcode/domain/usecase"
-	"zipcode/infrastructure"
 	"zipcode/infrastructure/database"
+	"zipcode/infrastructure/server"
 
 	"zipcode/presentation/api"
 )
@@ -19,6 +19,6 @@ func init() {
 }
 
 func main() {
-	apiServer := infrastructure.ApiServer(apiController)
+	apiServer := server.NewApiServer(apiController)
 	apiServer.Run()
 }
