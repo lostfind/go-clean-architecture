@@ -17,3 +17,8 @@ func (a AddressFinder) GetAddress(zipcode string) (model.Address, error) {
 	zipCode, err := a.zipCodeRepository.GetAddressForZipCode(zipcode)
 	return zipCode, err
 }
+
+func (u AddressFinder) GetPrefectures() ([]model.Prefecture, error) {
+	prefs, err := u.zipCodeRepository.GetPrefectures()
+	return prefs, err
+}
