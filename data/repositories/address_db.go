@@ -53,3 +53,23 @@ func (r addressDb) GetAddressForZipCode(zipcode string) (model.Address, error) {
 
 	return address, nil
 }
+
+func (r addressDb) GetPrefectures() (prefectures []model.Prefecture, err error) {
+	sql := `SELECT id, prefecutre_name, prefecutre_name_roman FROM prefectures;`
+
+	rows, err := r.db.Query(sql)
+	if err != nil {
+		return
+	}
+
+	for rows.Next() {
+		prefecture := model.Prefecture{}
+		err = rows.Scan(&prefecture.ID, &prefecture.Name, &prefecture.NameRoman)
+		if err != nil {
+			return
+		}
+		prefectures = append(prefectures, prefecture)
+	}
+
+	return
+}

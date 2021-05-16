@@ -59,6 +59,10 @@ func (f addressFile) GetAddressForZipCode(zipcode string) (model.Address, error)
 	return address, nil
 }
 
+func (f addressFile) GetPrefectures() ([]model.Prefecture, error) {
+	return nil, nil
+}
+
 type addressData struct {
 	zipCode      string
 	prefID       int64

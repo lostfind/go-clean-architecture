@@ -1,8 +1,11 @@
 package server
 
 import (
+	"zipcode/app/graphql/graph"
+	"zipcode/app/graphql/graph/generated"
 	"zipcode/presentation/api"
 
+	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,11 +22,17 @@ func NewApiServer(apiController api.ApiController) Server {
 }
 
 func (s apiServer) Run(addr ...string) (err error) {
-	s.Router()
 	return s.engine.Run(addr...)
 }
 
 func (s apiServer) Router() {
 	s.engine.GET("/zipcodes/:zipcode", func(c *gin.Context) { s.controller.GetAddress(c) })
-	s.engine.GET("/query")
+	s.engine.POST("/query", graphqlHandler())
+}
+
+func graphqlHandler() gin.HandlerFunc {
+	h := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
 }
