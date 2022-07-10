@@ -1,10 +1,9 @@
 package main
 
 import (
+	"zipcode/app/restapi"
 	"zipcode/data/repositories"
 	"zipcode/domain/usecase"
-	"zipcode/infrastructure/database"
-	"zipcode/infrastructure/server"
 
 	"zipcode/presentation/api"
 )
@@ -13,14 +12,13 @@ var apiController api.ApiController
 
 func main() {
 	inject()
-	apiServer := server.NewApiServer(apiController)
-	apiServer.Router()
-	apiServer.Run()
+	server := restapi.NewApiServer(apiController)
+	server.Router()
+	server.Run()
 }
 
 func inject() {
-	db := database.NewMySqlDB()
-	repository := repositories.NewDbRepository(db)
+	repository := repositories.NewFileRepository()
 	useCase := usecase.NewAddressFinder(repository)
 	apiController = api.NewApiController(useCase)
 }
