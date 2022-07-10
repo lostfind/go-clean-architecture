@@ -1,28 +1,31 @@
 package api
 
 import (
-	"net/http"
-	"zipcode/data/repositories"
 	"zipcode/domain/usecase"
 	"zipcode/presentation/viewmodel"
 )
 
-type ApiConroller struct {
+type ApiController interface {
+	GetAddress(ctx Context)
+}
+
+type apiController struct {
 	useCase usecase.AddressFinder
 }
 
-func NewAPIController() *ApiConroller {
-	return &ApiConroller{
-		useCase: usecase.NewAddressFinder(repositories.AddressFile{}),
+func NewApiController(uc usecase.AddressFinder) ApiController {
+	return &apiController{
+		useCase: uc,
 	}
 }
 
-func (c ApiConroller) GetAddress(w http.ResponseWriter, req *http.Request) error {
-	zipcode := req.URL.Query().Get("zipcode")
+func (c apiController) GetAddress(ctx Context) {
+	zipcode := ctx.Param("zipcode")
 	address, err := c.useCase.GetAddress(zipcode)
 	if err != nil {
-		return err
+		ErrResponse(ctx, err.Error())
+		return
 	}
 
-	return JsonResponse(w, viewmodel.NewAddressViewModel(address))
+	JsonResponse(ctx, viewmodel.NewAddressViewModel(address))
 }
