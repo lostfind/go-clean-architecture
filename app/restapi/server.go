@@ -1,8 +1,9 @@
-package server
+package restapi
 
 import (
 	"zipcode/app/graphql/graph"
 	"zipcode/app/graphql/graph/generated"
+	"zipcode/infrastructure/server"
 	"zipcode/presentation/api"
 
 	"github.com/99designs/gqlgen/graphql/handler"
@@ -14,7 +15,7 @@ type apiServer struct {
 	engine     *gin.Engine
 }
 
-func NewApiServer(apiController api.ApiController) Server {
+func NewApiServer(apiController api.ApiController) server.Server {
 	return apiServer{
 		controller: apiController,
 		engine:     gin.Default(),
